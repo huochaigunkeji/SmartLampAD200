@@ -1,0 +1,5 @@
+2016.10.11
+1.由于当前硬件电路设计错误，更改了软件SPI接口的宏定义，
+#define SOFT_SPI_MOSI			GPIO_Pin_13改为GPIO_Pin_12
+#define SOFT_SPI_MISO			GPIO_Pin_12改为GPIO_Pin_13
+发布v1.0版本
