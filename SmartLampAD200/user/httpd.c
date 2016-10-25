@@ -393,7 +393,7 @@ void accept_request(int client)
 				
 				ParamCnt = ParamParse( query_string  , ParamBuf , 3 );
 				
-				 if( GetParamValue( ParamBuf , ParamCnt, "light_value=" , ParamValue ) ==true )
+				 if( GetParamValue( ParamBuf , ParamCnt, "lamp_light_value=" , ParamValue ) ==true )
 				 {
 				 	 int Value = atoi( ParamValue );
 				 
@@ -469,7 +469,7 @@ void accept_request(int client)
 				
 				ParamCnt = ParamParse( query_string  , ParamBuf , 3 );
 				
-				 if( GetParamValue( ParamBuf , ParamCnt, "light_value=" , ParamValue ) ==true )
+				 if( GetParamValue( ParamBuf , ParamCnt, "led_light_value=" , ParamValue ) ==true )
 				 {
 				 	 int Value = atoi( ParamValue );
 				 
@@ -518,6 +518,10 @@ void accept_request(int client)
 			
 		}
 	}
+//	else if( strcasecmp( method, "POST" ) == 0 )
+//	{
+		
+//	}
 
 	vTaskDelay( 150 / portTICK_RATE_MS );
 	close( client );

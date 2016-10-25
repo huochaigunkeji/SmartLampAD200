@@ -452,7 +452,7 @@ Management_task(void *pvParameters)
 //		SpiWriteReg( 0x81 , 0x33 );
 //		printf("Spi Write!\r\n");
 
-		uint8_t value;
+//		uint8_t value;
 
 //		SpiReadReg( 0x01 , &value );
 //		printf("Spi Read Value:%d\r\n" , value );

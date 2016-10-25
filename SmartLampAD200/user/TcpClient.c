@@ -26,7 +26,7 @@
 
 
 //#define SERVER_IP			"124.193.120.164"
-#define SERVER_PORT			80
+//#define SERVER_PORT			80
 //#define URI_PATH			"/mp3/xajh.mp3"
 
 //#define SERVER_IP			"89.16.185.174"
@@ -55,9 +55,11 @@ void tcp_client_thread( void *pvParameters )
 	struct	hostent hostinfo,*phost;
 	char buf[101];
 	char hostname[100];
+	char portstr[6];
+	int port;
 	int ret;
 	char *ipaddr = NULL;
-	char *ptr , *path;
+	char *ptr , *ptr1, *path;
 
 	if( Url == NULL )
 	{
@@ -69,18 +71,59 @@ void tcp_client_thread( void *pvParameters )
 	{ 
 		Url += 7;
 	}
-	
-	ptr = strchr( Url , '/' );
+
+	ptr = strchr( Url , ':' );
+
 	if( ptr == NULL )
 	{
-		printf("error:url parse!\r\n");
-		return ;
-	}
-	path = ptr;
-	
-	memcpy( hostname , Url , ptr - Url );
-	hostname[ ptr - Url ] = 0x00;
+		ptr = strchr( Url , '/' );
+		if( ptr != NULL )
+		{
+			port = 80;
+		}
+		else
+		{
+			ptr += strlen( Url );
+		}
 
+	    path = ptr;
+	}
+	else
+	{
+		ptr1 = strchr( ptr , '/' );
+
+		if( ptr1 == NULL )
+		{
+			ptr1 = strlen( ptr ) + ptr;
+		}
+		if( ( ptr1 - ptr - 1) < 6 )
+		{
+			strncpy( portstr , ptr + 1 , ptr1 - ptr - 1 );
+			portstr[ptr1 - ptr - 1] = '\0';
+			port = atoi( portstr);
+		}
+		else
+		{
+			printf("error:parase port!\r\n");
+			return;
+		}
+
+		path = ptr1;
+	}
+
+
+	if( (ptr - Url) < 100 )
+	{
+		memcpy( hostname , Url , ptr - Url );
+		hostname[ ptr - Url ] = 0x00;
+	}
+	else
+	{
+		printf("url is too long!\r\n");
+		return;
+	}
+
+	printf("hostname:%s,port:%d!\r\n" , hostname , port );
 	err_t err;
 	uint8_t CycleNum = 0;
 
@@ -173,7 +216,7 @@ void tcp_client_thread( void *pvParameters )
 
 		address.sin_family = AF_INET;
 		address.sin_addr.s_addr = inet_addr( ipaddr );
-		address.sin_port = htons( SERVER_PORT );
+		address.sin_port = htons( port );
 		address.sin_len = sizeof(address);
 		len = sizeof(address);
 
